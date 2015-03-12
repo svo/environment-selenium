@@ -1,0 +1,32 @@
+
+    - name: Install xvfb
+      apt: pkg=xvfb
+      sudo: yes
+      tags:
+      - selenium
+      - test
+
+    - name: Add xvfb display port
+      lineinfile: dest=/etc/environment line="DISPLAY=:10"
+      sudo: yes
+      tags:
+      - selenium
+      - test
+
+    - name: Copy xvfb upstart configuration
+      copy: src=xvfb.conf dest=/etc/init mode=0644
+      sudo: yes
+      notify:
+      - Restart xvfb
+      tags:
+      - selenium
+      - test
+
+    - name: Copy legacy firefox .deb
+      copy: src=firefox_31.0+build1-0ubuntu0.14.04.1_amd64.deb dest=~/firefox_31.0+build1-0ubuntu0.14.04.1_amd64.deb
+      notify:
+      - Install legacy firefox from .deb
+      sudo: yes
+      tags:
+      - selenium
+      - test
